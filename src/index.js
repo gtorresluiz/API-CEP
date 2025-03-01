@@ -4,15 +4,15 @@ const axios = require('axios');
 
 const app = express();
 
-const port = 3000;
+const PORT = 3001;
 
-app.get(`/cep/:cep`, async (req, res) => {
+app.get('/cep/:cep', async (req, res) => {
     const { cep } = req.params;
 
     try {
         const response = await axios.get(`https://viacep.com.br/ws/${cep}/json`);
 
-        const endereco = response.enderece()
+        const endereco = response.data
 
         if (endereco.erro) {
             return res.status(404).json({ mensagem: 'CEP não encontrado' })
@@ -34,4 +34,8 @@ app.get(`/cep/:cep`, async (req, res) => {
         res.status(500).json({ mensagem: "Erro ao consultar o CEP" })
     }
 
+});
+
+app.listen(PORT, () => {
+    console.log(`servidor rodando em http://localhost:${PORT}`)
 });
